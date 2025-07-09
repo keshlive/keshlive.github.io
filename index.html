@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KESH</title>
-    <style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KESH</title>
+  <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -41,44 +41,53 @@
             width: auto;
             height: auto;
         }
-    </style>
+
+      .link-container {
+        text-align: center;
+        margin-top: 5px;
+      }
+
+      .custom-link {
+        font-size: 30px;
+        color: orange;
+        text-decoration: none;
+      }
+  </style>
 </head>
 <body>
-
+  <div class="main-container">
     <div id="countdown"></div>
 
     <div id="image-container">
-        <img id="image-viewer" src="kesh.jpeg" alt="Poster Image">
+      <img id="image-viewer" src="kesh.jpeg" alt="Poster Image" />
     </div>
 
-    <script>
-        const countdownDate = new Date("2024-08-02T22:00:00+01:00").getTime();
+    <div class="link-container">
+      <a href="https://chat.whatsapp.com/J3OQpqbpHtA2Mth4S4mwOc?mode=r_t" class="custom-link" target="_blank">
+        Join the kesh community!
+      </a>
+    </div>
+  </div>
 
-        // Update the countdown every 1 second
-        const countdownFunction = setInterval(function() {
-            // Get today's date and time
-            const now = new Date().getTime();
+  <script>
+    const countdownDate = new Date("2025-07-11T23:00:00+01:00").getTime();
+    const countdownFunction = setInterval(function () {
+      const now = new Date().getTime();
+      const distance = countdownDate - now;
 
-            // Find the time difference between now and the countdown date
-            const distance = countdownDate - now;
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            // Time calculations for days, hours, minutes, and seconds
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      document.getElementById("countdown").innerHTML =
+        "Countdown to KESH: " + days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
 
-            // Display the result in the element with id="countdown"
-            document.getElementById("countdown").innerHTML =
-                "Countdown to KESH: " + days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
-
-            // If the countdown is over, display "EXPIRED"
-            if (distance < 0) {
-                clearInterval(countdownFunction);
-                document.getElementById("countdown").innerHTML = "EXPIRED";
-            }
-        }, 1000);
-    </script>
-
+      if (distance < 0) {
+        clearInterval(countdownFunction);
+        document.getElementById("countdown").innerHTML = "EXPIRED";
+      }
+    }, 1000);
+  </script>
 </body>
 </html>
