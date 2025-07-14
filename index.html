@@ -4,90 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>KESH</title>
-  <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            height: 100vh;
-            background-color: #000000;
-        }
-        #countdown {
-            font-size: 24px;
-            color: #a4a4a4;
-            background-color: #000000;
-            padding: 10px;
-            border-radius: 5px;
-            text-align: center;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        #image-container {
-            width: 100%;
-            flex: 1; /* Take up the remaining space after the timer */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            background-color: #000000;
-        }
-        #image-viewer {
-            max-width: 100%;
-            max-height: 100%;
-            width: auto;
-            height: auto;
-        }
-
-      .link-container {
-        text-align: center;
-        margin-top: 5px;
-      }
-
-      .custom-link {
-        font-size: 30px;
-        color: orange;
-        text-decoration: none;
-      }
-  </style>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/hydra-element"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="main-container">
-    <div id="countdown"></div>
-
-    <div id="image-container">
-      <img id="image-viewer" src="kesh_off_grid_2.jpeg" alt="Poster Image" />
-    </div>
-
-    <div class="link-container">
-      <a href="https://chat.whatsapp.com/J3OQpqbpHtA2Mth4S4mwOc?mode=r_t" class="custom-link" target="_blank">
-        Join the kesh community!
-      </a>
-    </div>
+  <div class="tabs">
+    <button class="tablink active" data-page="home.html">KESH</button>
+    <button class="tablink" data-page="about.html">About us</button>
+    <button class="tablink" data-page="events.html">Past Events</button>
   </div>
-
-  <script>
-    const countdownDate = new Date("2025-07-11T23:00:00+01:00").getTime();
-    const countdownFunction = setInterval(function () {
-      const now = new Date().getTime();
-      const distance = countdownDate - now;
-
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      document.getElementById("countdown").innerHTML =
-        "Countdown to KESH: " + days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
-
-      if (distance < 0) {
-        clearInterval(countdownFunction);
-        document.getElementById("countdown").innerHTML = "EXPIRED";
-      }
-    }, 1000);
-  </script>
+  <div id="main-content"></div>
+  <script src="js/common.js"></script>
 </body>
 </html>

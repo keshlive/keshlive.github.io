@@ -1,0 +1,26 @@
+<div id="hydra-countdown"></div>
+<hydra-element global="true">
+  s0.initImage("./assets/home/graffiti_1.jpg")
+  s1.initImage("./assets/home/kesh_tag_zoom.jpg")
+
+  let mix = src(s0)
+    .add(
+      osc(5, 1, 15)
+      .color(0, 1, 2), 0.3)
+    .modulate(
+      osc(6, 0.1, 1.2),
+      0.1
+    )
+
+  let mix2 = src(s1)
+    .add(
+      osc(10, 1, 15)
+      .color(0, 0.6, 0), 0.2)
+    .modulate(
+      osc(6, 0.1, 1.2),
+      0.5
+    )
+
+  mix.add(mix2, 0.5)
+    .out()
+</hydra-element> 
