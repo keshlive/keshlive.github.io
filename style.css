@@ -168,25 +168,26 @@ hydra-element {
   align-items: center;
 }
 .events-container {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  padding: 32px 0;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 50px 32px; /* 48px vertical, 32px horizontal */
+  padding: 32px;
   width: 100%;
+  box-sizing: border-box;
 }
+
 .event-card {
   background: rgba(20,20,20,0.95);
   border-radius: 16px;
   box-shadow: 0 4px 24px rgba(0,0,0,0.3);
   padding: 24px;
-  max-width: 50%;
-  width: 90vw;
   color: #fff;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  height: 100%;
 }
+
 .event-date {
   font-size: 1.1em;
   color: orange;
@@ -205,6 +206,8 @@ hydra-element {
   display: flex;
   gap: 12px;
   overflow-x: auto;
+    width: 80%;
+    height: 80%;
   padding-bottom: 4px;
 }
 .event-images img {
