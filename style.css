@@ -1,5 +1,12 @@
 @font-face {
   font-family: 'RubikIso';
+  src: url('./font/RubikIso-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'BitcountGrid';
   src: url('./font/BitcountGridDouble-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
@@ -14,7 +21,8 @@ body {
     justify-content: flex-start;
     height: 100vh;
     background-color: #000000;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 .tabs {
     width: 100%;
@@ -260,10 +268,10 @@ hydra-element {
 }
 
 .about-container {
-  max-width: 600px;
+  max-width: 800px;
   width: 90vw;
   margin: 48px auto 0 auto;
-  padding: 32px 24px;
+  padding: 0;
   background: rgba(20,20,20,0.97);
   border-radius: 18px;
   box-shadow: 0 4px 24px rgba(0,0,0,0.25);
@@ -271,42 +279,243 @@ hydra-element {
   flex-direction: column;
   align-items: center;
   color: #fff;
-}
-.about-container h1 {
-  font-size: 2.2em;
-  margin-bottom: 18px;
-  color: orange;
-  text-align: center;
-  letter-spacing: 1px;
-}
-.about-container p {
-  font-size: 1.18em;
-  line-height: 1.7;
-  margin-bottom: 0;
-  color: #e0e0e0;
-  text-align: center;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Modal styles for event popups */
-.modal-overlay {
-  position: fixed;
+.about-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+}
+
+.about-header {
+  width: 100%;
+  padding: 10px 24px 20px;
+  text-align: center;
+  background: linear-gradient(to bottom, rgba(30,30,30,0.9), rgba(20,20,20,0.97));
+}
+
+.about-title {
+  font-size: 2.5em;
+  margin-bottom: 2px;
+    margin-top: 2px;
+  color: #fff;
+  text-align: center;
+  letter-spacing: 0px;
+  text-transform: uppercase;
+}
+
+.custom-line {
+  width: 40%;
+    margin-top: 0px;
+}
+
+.highlight {
+  color: orange;
+  position: relative;
+  display: inline-block;
+}
+
+.highlight::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: orange;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s ease;
+}
+
+.about-container:hover .highlight::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.about-subtitle {
+  font-size: 1.1em;
+  color: #a0a0a0;
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+}
+
+.about-image-container {
+  width: 100%;
+  height: 250px;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.about-container:hover .about-image {
+  transform: scale(1.05);
+}
+
+.image-overlay {
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6));
+}
+
+.about-content {
+  padding-right: 5%;
+  padding-left: 5%;
+  width: 95%;
+  font-size: medium;
+}
+
+.about-intro {
+  font-size: 1.2em;
+  line-height: 1.7;
+  margin-bottom: 24px;
+  color: #e0e0e0;
+  text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 24px;
+}
+
+.dropcap {
+  float: left;
+  font-size: 3em;
+  line-height: 0.8;
+  margin-right: 8px;
+  color: orange;
+  font-weight: bold;
+}
+
+.about-section {
+  margin-bottom: 24px;
+  padding: 16px;
+  border-radius: 8px;
+  background: rgba(30,30,30,0.5);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.about-section:hover {
+  transform: translateX(5px);
+  background: rgba(40,40,40,0.5);
+}
+
+.section-title {
+  font-size: 1.4em;
+  margin-bottom: 12px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+}
+
+.section-icon {
+  font-style: normal;
+  margin-right: 10px;
+  font-size: 1.2em;
+}
+
+.about-section p {
+  font-size: 1.1em;
+  line-height: 1.6;
+  margin-bottom: 0;
+  color: #d0d0d0;
+}
+
+.about-footer {
+  width: 100%;
+  padding: 20px;
+  background: rgba(15,15,15,0.8);
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.social-links {
+  display: flex;
+  gap: 20px;
+}
+
+.social-link {
+  color: #a0a0a0;
+  text-decoration: none;
+  font-size: 1em;
+  transition: color 0.2s ease, transform 0.2s ease;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.social-link:hover {
+  color: orange;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+  .about-container {
+    width: 95vw;
+    margin: 20px auto 0 auto;
+  }
+
+  .about-title {
+    font-size: 2em;
+  }
+
+  .about-subtitle {
+    font-size: 0.9em;
+  }
+
+  .about-image-container {
+    height: 180px;
+  }
+
+  .about-intro {
+    font-size: 1.1em;
+  }
+
+  .section-title {
+    font-size: 1.2em;
+  }
+
+  .about-section p {
+    font-size: 1em;
+  }
+
+  .social-links {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+/* Modal styles for event popups */
+.modal-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  width: 100%;
+  height: 60%;
   background-color: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 2000;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s, visibility 0.3s;
+  pointer-events: none;
 }
 
 .modal-overlay.active {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 
 .modal-content {

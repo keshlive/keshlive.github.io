@@ -106,13 +106,22 @@ function initEventCards() {
   const eventCards = document.querySelectorAll('.event-card');
   eventCards.forEach(card => {
     card.style.cursor = 'pointer';
-    card.addEventListener('click', function() {
+
+    // Function to handle both click and touch events
+    const handleCardInteraction = function() {
       const image = card.querySelector('.event-images img').src;
       const title = card.querySelector('.event-title').textContent;
       const date = card.querySelector('.event-date').textContent;
       const description = card.querySelector('.event-description').textContent;
 
       openModal(image, title, date, description);
+    };
+
+    // Add multiple event listeners for better cross-device compatibility
+    card.addEventListener('click', handleCardInteraction);
+    card.addEventListener('touchend', function(e) {
+      e.preventDefault(); // Prevent default touch behavior
+      handleCardInteraction();
     });
   });
 }
@@ -120,26 +129,54 @@ function initEventCards() {
 // Open modal with event details
 function openModal(image, title, date, description) {
   const modalOverlay = document.querySelector('.modal-overlay');
+
+  // If modal doesn't exist for some reason, create it first
+  if (!modalOverlay) {
+    createModal();
+    return openModal(image, title, date, description);
+  }
+
   const modalImage = modalOverlay.querySelector('.modal-image');
   const modalTitle = modalOverlay.querySelector('.modal-title');
   const modalDate = modalOverlay.querySelector('.modal-date');
   const modalDescription = modalOverlay.querySelector('.modal-description');
 
+  // Ensure image is loaded before showing modal
+  modalImage.onload = function() {
+    // Show modal with animation after image is loaded
+    setTimeout(() => {
+      modalOverlay.classList.add('active');
+
+      // Force browser to recognize the modal is active (helps with some desktop browsers)
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => {
+        document.body.style.overflow = '';
+      }, 50);
+    }, 10);
+  };
+
+  // Set content
   modalImage.src = image;
   modalTitle.textContent = title;
   modalDate.textContent = date;
   modalDescription.textContent = description;
 
-  // Show modal with animation
-  setTimeout(() => {
-    modalOverlay.classList.add('active');
-  }, 10);
+  // In case the image is already cached and onload doesn't fire
+  if (modalImage.complete) {
+    modalImage.onload();
+  }
 }
 
 // Close modal
 function closeModal() {
   const modalOverlay = document.querySelector('.modal-overlay');
-  modalOverlay.classList.remove('active');
+  if (modalOverlay) {
+    // Remove active class to hide the modal with animation
+    modalOverlay.classList.remove('active');
+
+    // Ensure body overflow is restored
+    document.body.style.overflow = '';
+  }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
