@@ -10,6 +10,31 @@ function loadPage(page, callback) {
       if (page === 'events.html') {
         initEventCards();
       }
+
+      // Ensure videos autoplay when about page is loaded
+      if (page === 'about.html') {
+        // Call immediately
+        ensureVideoAutoplay();
+
+        // And also with a small delay to ensure DOM is fully processed
+        setTimeout(() => {
+          ensureVideoAutoplay();
+
+          // Force play on all background videos
+          document.querySelectorAll('.background-video').forEach(video => {
+            // Force inline styles
+            video.style.visibility = 'visible';
+            video.style.display = 'block';
+            video.style.opacity = '1'; // Full opacity
+            video.style.zIndex = '0'; // Ensure proper z-index
+
+            // Try to play
+            if (video.paused) {
+              video.play().catch(e => console.log("Delayed force play failed:", e));
+            }
+          });
+        }, 300);
+      }
     });
 }
 
@@ -105,7 +130,10 @@ function initEventCards() {
 
   const eventCards = document.querySelectorAll('.event-card');
   eventCards.forEach(card => {
-    card.style.cursor = 'pointer';
+    // Create a center clickable element
+    const centerElement = document.createElement('div');
+    centerElement.className = 'event-card-center';
+    card.appendChild(centerElement);
 
     // Function to handle both click and touch events
     const handleCardInteraction = function() {
@@ -117,9 +145,9 @@ function initEventCards() {
       openModal(image, title, date, description);
     };
 
-    // Add multiple event listeners for better cross-device compatibility
-    card.addEventListener('click', handleCardInteraction);
-    card.addEventListener('touchend', function(e) {
+    // Add multiple event listeners to the center element only
+    centerElement.addEventListener('click', handleCardInteraction);
+    centerElement.addEventListener('touchend', function(e) {
       e.preventDefault(); // Prevent default touch behavior
       handleCardInteraction();
     });
@@ -179,14 +207,230 @@ function closeModal() {
   }
 }
 
+// Function to ensure videos autoplay
+function ensureVideoAutoplay() {
+  const videos = document.querySelectorAll('video');
+  videos.forEach(video => {
+    // Set additional attributes to help with autoplay
+    video.setAttribute('autoplay', '');
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '');
+    video.setAttribute('loop', '');
+    video.muted = true; // Explicitly set muted property
+
+    // Force inline styles to ensure visibility
+    if (video.classList.contains('background-video')) {
+      video.style.visibility = 'visible';
+      video.style.display = 'block';
+      video.style.opacity = '1'; // Full opacity
+      video.style.zIndex = '0'; // Changed from -1 to 0 to ensure it's visible
+    }
+
+    // Try to play the video
+    const playPromise = video.play();
+
+    if (playPromise !== undefined) {
+      playPromise.catch(e => {
+        console.log("Video autoplay was prevented:", e);
+        // Try again after a short delay
+        setTimeout(() => {
+          video.play().catch(e => console.log("Retry failed:", e));
+        }, 1000);
+      });
+    }
+
+    // Add additional event listeners to ensure video plays
+    if (video.classList.contains('background-video')) {
+      // Try playing multiple times with increasing delays
+      for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+          if (video.paused) {
+            console.log(`Delayed play attempt ${i+1}`);
+            video.play().catch(e => console.log(`Delayed play ${i+1} failed:`, e));
+          }
+        }, 500 + (i * 500)); // Increasing delays: 500ms, 1000ms, 1500ms, etc.
+      }
+
+      // Add event listeners for various user interactions
+      ['click', 'scroll', 'mousemove', 'touchstart', 'focus', 'blur'].forEach(eventType => {
+        document.addEventListener(eventType, () => {
+          if (video.paused) {
+            video.play().catch(e => console.log(`${eventType} play failed:`, e));
+          }
+        }, { once: true });
+      });
+
+      // Create a persistent play attempt that runs every second
+      const persistentPlayInterval = setInterval(() => {
+        if (video.paused) {
+          console.log("Persistent play attempt");
+          video.play().catch(e => console.log("Persistent play failed:", e));
+        }
+      }, 1000);
+
+      // Store the interval ID on the video element to avoid memory leaks
+      video._persistentPlayInterval = persistentPlayInterval;
+    }
+  });
+}
+
+// Function to periodically check and ensure videos are playing
+function setupVideoPlaybackMonitor() {
+  // Check very frequently (every 100ms) if videos are playing
+  setInterval(() => {
+    const videos = document.querySelectorAll('video');
+    videos.forEach(video => {
+      // If video is paused and should be playing, restart it
+      if (video.paused && video.classList.contains('background-video')) {
+        console.log("Detected paused video, restarting playback");
+        video.play().catch(e => console.log("Restart failed:", e));
+      }
+    });
+  }, 100);
+
+  // Add event listeners to ensure video plays on hover and continues playing after hover
+  document.addEventListener('DOMContentLoaded', () => {
+    const setupVideoHoverHandlers = () => {
+      const container = document.querySelector('.about-full-container');
+      if (container) {
+        const video = container.querySelector('.background-video');
+        if (video) {
+          // Force video to be visible and playing
+          video.style.visibility = 'visible';
+          video.style.display = 'block';
+          video.style.opacity = '1'; // Full opacity
+          video.style.zIndex = '0'; // Ensure proper z-index
+
+          // Ensure video plays when page loads
+          video.play().catch(e => console.log("Initial play failed:", e));
+
+          // Try multiple times to start the video
+          for (let i = 0; i < 5; i++) {
+            setTimeout(() => {
+              if (video.paused) {
+                console.log(`Attempt ${i+1} to play video`);
+                video.play().catch(e => console.log(`Play attempt ${i+1} failed:`, e));
+              }
+            }, i * 300);
+          }
+
+          // Ensure video plays when container is hovered (fallback)
+          container.addEventListener('mouseover', () => {
+            if (video.paused) {
+              video.play().catch(e => console.log("Mouseover play failed:", e));
+            }
+          });
+
+          // Ensure video continues playing when mouse leaves container
+          container.addEventListener('mouseout', () => {
+            if (video.paused) {
+              video.play().catch(e => console.log("Mouseout play failed:", e));
+            }
+          });
+
+          // Add more event listeners to try to play the video
+          ['scroll', 'mousemove', 'touchstart', 'focus', 'blur'].forEach(eventType => {
+            document.addEventListener(eventType, () => {
+              if (video.paused) {
+                video.play().catch(e => console.log(`${eventType} play failed:`, e));
+              }
+            }, { once: true });
+          });
+        }
+      }
+    };
+
+    // Setup handlers immediately if DOM is already loaded
+    setupVideoHoverHandlers();
+
+    // Also setup handlers when about page is loaded via AJAX
+    document.body.addEventListener('DOMNodeInserted', (e) => {
+      if (e.target && e.target.classList && e.target.classList.contains('about-full-container')) {
+        setupVideoHoverHandlers();
+      }
+    });
+
+    // Also check periodically for the container and video
+    const checkInterval = setInterval(() => {
+      const container = document.querySelector('.about-full-container');
+      if (container) {
+        const video = container.querySelector('.background-video');
+        if (video && video.paused) {
+          console.log("Periodic check found paused video, playing");
+          video.play().catch(e => console.log("Periodic play failed:", e));
+        }
+      }
+    }, 1000);
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('.tablink').forEach(btn => {
     btn.addEventListener('click', handleTabClick);
   });
-  // Load home.html by default
-  loadPage('home.html', () => {
-    const script = document.createElement('script');
-    script.src = 'js/hydra-visual.js';
-    document.body.appendChild(script);
+
+  // Setup periodic video playback monitoring
+  setupVideoPlaybackMonitor();
+
+  // Add a MutationObserver to detect when videos are added to the DOM
+  const observer = new MutationObserver(mutations => {
+    mutations.forEach(mutation => {
+      if (mutation.addedNodes && mutation.addedNodes.length > 0) {
+        for (let i = 0; i < mutation.addedNodes.length; i++) {
+          const node = mutation.addedNodes[i];
+          // Check if the added node is a video element
+          if (node.nodeName === 'VIDEO') {
+            console.log("Video element added to DOM, ensuring playback");
+            // Force styles and play
+            if (node.classList.contains('background-video')) {
+              node.style.visibility = 'visible';
+              node.style.display = 'block';
+              node.style.opacity = '1'; // Full opacity
+              node.style.zIndex = '0'; // Ensure proper z-index
+              node.muted = true;
+              node.play().catch(e => console.log("MutationObserver play failed:", e));
+            }
+          }
+          // Check if the added node contains video elements
+          else if (node.querySelectorAll) {
+            const videos = node.querySelectorAll('video.background-video');
+            videos.forEach(video => {
+              console.log("Video found in added DOM node, ensuring playback");
+              video.style.visibility = 'visible';
+              video.style.display = 'block';
+              video.style.opacity = '1'; // Full opacity
+              video.style.zIndex = '0'; // Ensure proper z-index
+              video.muted = true;
+              video.play().catch(e => console.log("MutationObserver nested play failed:", e));
+            });
+          }
+        }
+      }
+    });
   });
-});
+
+  // Start observing the document with the configured parameters
+  observer.observe(document.body, { childList: true, subtree: true });
+
+  // Check if URL has a hash for direct navigation
+  const hash = window.location.hash.substring(1);
+  let pageToLoad = 'home.html';
+
+  if (hash === 'about') {
+    pageToLoad = 'about.html';
+    document.querySelector('.tablink[data-page="about.html"]').classList.add('active');
+    document.querySelector('.tablink[data-page="home.html"]').classList.remove('active');
+  }
+
+  // Load the appropriate page
+  loadPage(pageToLoad, () => {
+    if (pageToLoad === 'home.html') {
+      const script = document.createElement('script');
+      script.src = 'js/hydra-visual.js';
+      document.body.appendChild(script);
+    } else if (pageToLoad === 'about.html') {
+      // Ensure videos autoplay when directly navigating to about page
+      ensureVideoAutoplay();
+    }
+  });
+  });

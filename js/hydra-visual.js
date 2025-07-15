@@ -12,7 +12,21 @@
       ? "EXPIRED"
       : `Countdown to KESH: ${days}d ${hours}h ${minutes}m ${seconds}s`;
     const hydraCountdown = document.getElementById("hydra-countdown");
-    if (hydraCountdown) hydraCountdown.textContent = text;
+    if (hydraCountdown) {
+      // Clear previous content
+      hydraCountdown.innerHTML = '';
+
+      // Create a link element
+      const link = document.createElement('a');
+      link.href = "https://www.instagram.com/kesh.u.later?igsh=aWkzdGcyaXMwMmQw"; // Link to events page
+      link.textContent = text;
+      link.style.color = 'inherit'; // Inherit color from parent
+      link.style.textDecoration = 'none'; // No underline
+      link.target = "_blank"
+
+      // Append the link to the countdown element
+      hydraCountdown.appendChild(link);
+    }
   }
   if (document.getElementById("hydra-countdown")) {
     updateCountdowns();
