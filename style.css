@@ -169,14 +169,11 @@ hydra-element {
 }
 .events-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px 24px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
   padding: 32px;
   justify-items: center;
-  width: 100%;
-  box-sizing: border-box;
 }
-
 .event-card {
   display: flex;
   flex-direction: row;
@@ -184,30 +181,23 @@ hydra-element {
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   color: #fff;
+  max-width: 100%;
   width: 100%;
-  max-width: 480px;
   height: 160px;
   overflow: hidden;
-  transition: transform 0.2s ease;
 }
-
-.event-card:hover {
-  transform: scale(1.02);
-}
-
 .event-images {
   flex: 0 0 40%;
   height: 100%;
   overflow: hidden;
 }
-
 .event-images img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  border-radius: 0;
 }
-
 .event-info {
   flex: 1;
   padding: 16px;
@@ -216,49 +206,19 @@ hydra-element {
   justify-content: center;
   gap: 4px;
 }
-
 .event-date {
   font-size: 0.9em;
   color: orange;
   font-weight: bold;
 }
-
 .event-title {
   font-size: 1.1em;
   font-weight: bold;
 }
-
 .event-description {
   font-size: 1em;
   opacity: 0.9;
 }
-
-/* 📱 Responsive stacked layout on small screens */
-@media (max-width: 600px) {
-  .event-card {
-    flex-direction: column;
-    height: auto;
-  }
-
-  .event-images {
-    flex: none;
-    width: 100%;
-    height: 180px;
-  }
-
-  .event-info {
-    padding: 12px 16px;
-  }
-
-  .event-title {
-    font-size: 1.2em;
-  }
-
-  .event-description {
-    font-size: 1em;
-  }
-}
-
 .about-container {
   max-width: 600px;
   width: 90vw;
