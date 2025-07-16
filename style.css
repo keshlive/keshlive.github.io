@@ -275,8 +275,8 @@ hydra-element {
 
 .about-container {
   max-width: 800px;
-  width: 90vw;
-  margin: 48px auto 0 auto;
+  width: 85vw;
+  margin: 48px auto 48px auto;
   padding: 0;
   background: rgba(20,20,20,0.7);
   border-radius: 18px;
