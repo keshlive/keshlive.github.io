@@ -172,7 +172,7 @@ hydra-element {
 #main-content {
   flex: 1 1 auto;
   width: 100vw;
-  height: calc(100vh - 50px);
+  height: 100vh;
   overflow-y: auto;
   position: relative;
   background: #000;
@@ -293,7 +293,7 @@ hydra-element {
 .about-full-container {
   width: 100%;
   height: 100%;
-  margin: 48px auto 0 auto;
+  margin: 48px auto 48px auto;
   padding: 0;
   background: rgba(20,20,20,0.3); /* Further reduced opacity to make video more visible */
   border-radius: 0px;
