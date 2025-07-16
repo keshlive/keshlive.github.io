@@ -147,9 +147,34 @@ function initEventCards() {
     };
 
     // Add multiple event listeners to the center element only
-    centerElement.addEventListener('click', handleCardInteraction);
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let moved = false;
+      
+    centerElement.addEventListener('touchstart', function(e) {
+      moved = false;
+      const touch = e.touches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+    });
+
+    centerElement.addEventListener('touchmove', function(e) {
+      const touch = e.touches[0];
+      const dx = Math.abs(touch.clientX - touchStartX);
+      const dy = Math.abs(touch.clientY - touchStartY);
+      if (dx > 10 || dy > 10) {
+        moved = true; // User scrolled
+      }
+    });
+
     centerElement.addEventListener('touchend', function(e) {
-      e.preventDefault(); // Prevent default touch behavior
+      if (!moved) {
+        e.preventDefault(); // Only prevent default if it's a tap
+        handleCardInteraction();
+      }
+    });
+
+    centerElement.addEventListener('click', function() {
       handleCardInteraction();
     });
   });
