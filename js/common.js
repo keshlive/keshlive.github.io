@@ -111,7 +111,8 @@ function createModal() {
   // Add event listeners for closing
   modalClose.addEventListener('click', closeModal);
   modalOverlay.addEventListener('click', function(e) {
-    if (e.target === modalOverlay) {
+    const modalContent = document.querySelector('.modal-content');
+    if (!modalContent.contains(e.target)) {
       closeModal();
     }
   });
