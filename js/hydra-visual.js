@@ -1,6 +1,6 @@
 // Countdown logic for KESH event
 (function() {
-  const countdownDate = new Date("2025-09-16T23:00:00+01:00").getTime();
+  const countdownDate = new Date("2025-09-19T23:00:00+01:00").getTime();
   function updateCountdowns() {
     const now = new Date().getTime();
     const distance = countdownDate - now;
