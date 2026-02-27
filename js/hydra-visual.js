@@ -9,7 +9,7 @@
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
     const text = distance < 0
-      ? "EXPIRED"
+      ? "SOON 👀"
       : `Countdown to KESH: ${days}d ${hours}h ${minutes}m ${seconds}s`;
     const hydraCountdown = document.getElementById("hydra-countdown");
     if (hydraCountdown) {
